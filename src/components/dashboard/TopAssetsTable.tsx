@@ -7,76 +7,44 @@ function formatVolume(volume: number): string {
   return `$${volume}`;
 }
 
-function formatTxCount(count: number): string {
-  if (count >= 1000) return `${(count / 1000).toFixed(1)}k`;
-  return count.toString();
-}
-
 export function TopAssetsTable() {
   return (
-    <div className="rounded-xl border border-border/50 bg-card p-6">
-      <div className="mb-6">
-        <h3 className="text-lg font-semibold">Top Assets & Anchors</h3>
+    <div className="rounded-lg border border-border bg-card p-5">
+      <div className="mb-4">
+        <h3 className="font-medium">Top Assets</h3>
         <p className="text-sm text-muted-foreground">By volume and success rate</p>
       </div>
       
       <div className="overflow-x-auto">
-        <table className="w-full">
+        <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-border/50">
-              <th className="pb-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                Asset
-              </th>
-              <th className="pb-3 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                Issuer
-              </th>
-              <th className="pb-3 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                Volume (7d)
-              </th>
-              <th className="pb-3 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                Success Rate
-              </th>
-              <th className="pb-3 text-right text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                Transactions
-              </th>
+            <tr className="border-b border-border">
+              <th className="pb-3 text-left text-xs font-medium text-muted-foreground">Asset</th>
+              <th className="pb-3 text-right text-xs font-medium text-muted-foreground">Volume</th>
+              <th className="pb-3 text-right text-xs font-medium text-muted-foreground">Success</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-border/30">
+          <tbody className="divide-y divide-border">
             {topAssets.map((asset, index) => (
-              <tr
-                key={index}
-                className="group transition-colors hover:bg-accent/30"
-              >
-                <td className="py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-xs font-semibold text-primary">
-                      {asset.asset.slice(0, 2)}
-                    </div>
-                    <span className="font-medium">{asset.asset}</span>
+              <tr key={index} className="hover:bg-accent/50 transition-colors">
+                <td className="py-3">
+                  <div>
+                    <span className="font-mono text-xs">{asset.asset}</span>
+                    <span className="text-xs text-muted-foreground ml-2">{asset.issuer}</span>
                   </div>
                 </td>
-                <td className="py-4">
-                  <span className="text-sm text-muted-foreground">{asset.issuer}</span>
+                <td className="py-3 text-right font-mono text-xs text-muted-foreground">
+                  {formatVolume(asset.volume)}
                 </td>
-                <td className="py-4 text-right">
-                  <span className="font-mono-numbers text-sm">
-                    {formatVolume(asset.volume)}
-                  </span>
-                </td>
-                <td className="py-4 text-right">
+                <td className="py-3 text-right">
                   <span
                     className={cn(
-                      "font-mono-numbers text-sm",
-                      asset.successRate >= 98 ? "text-success" : 
+                      "font-mono text-xs",
+                      asset.successRate >= 98 ? "text-success" :
                       asset.successRate >= 95 ? "text-chart-2" : "text-warning"
                     )}
                   >
                     {asset.successRate}%
-                  </span>
-                </td>
-                <td className="py-4 text-right">
-                  <span className="font-mono-numbers text-sm text-muted-foreground">
-                    {formatTxCount(asset.txCount)}
                   </span>
                 </td>
               </tr>

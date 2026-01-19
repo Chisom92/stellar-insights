@@ -2,83 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Ndii Intelligence Design System - Professional Fintech Dark Theme */
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
 @layer base {
   :root {
-    /* Dark slate base - professional fintech aesthetic */
-    --background: 222 47% 6%;
-    --foreground: 210 40% 96%;
+    --background: 220 16% 8%;
+    --foreground: 220 10% 92%;
 
-    /* Card surfaces with subtle elevation */
-    --card: 222 44% 8%;
-    --card-foreground: 210 40% 96%;
-    --card-elevated: 222 40% 10%;
+    --card: 220 14% 10%;
+    --card-foreground: 220 10% 92%;
+    --card-elevated: 220 14% 12%;
 
-    --popover: 222 44% 10%;
-    --popover-foreground: 210 40% 96%;
+    --popover: 220 14% 12%;
+    --popover-foreground: 220 10% 92%;
 
-    /* Teal accent - modern fintech feel */
-    --primary: 173 80% 45%;
-    --primary-foreground: 222 47% 6%;
-    --primary-glow: 173 80% 55%;
+    --primary: 168 45% 52%;
+    --primary-foreground: 220 16% 8%;
 
-    /* Neutral secondary */
-    --secondary: 220 20% 18%;
-    --secondary-foreground: 210 30% 80%;
+    --secondary: 220 12% 16%;
+    --secondary-foreground: 220 10% 75%;
 
-    /* Muted elements */
-    --muted: 220 20% 14%;
-    --muted-foreground: 215 20% 55%;
+    --muted: 220 12% 14%;
+    --muted-foreground: 220 10% 50%;
 
-    /* Accent for highlights */
-    --accent: 220 25% 20%;
-    --accent-foreground: 210 40% 96%;
+    --accent: 220 12% 18%;
+    --accent-foreground: 220 10% 92%;
 
-    /* Status colors */
-    --success: 152 70% 45%;
-    --success-foreground: 152 70% 95%;
-    --warning: 38 92% 50%;
-    --warning-foreground: 38 92% 10%;
-    --destructive: 0 72% 55%;
+    --success: 145 50% 46%;
+    --success-foreground: 145 50% 95%;
+    --warning: 35 85% 52%;
+    --warning-foreground: 35 85% 10%;
+    --destructive: 0 55% 52%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Borders and inputs */
-    --border: 220 20% 18%;
-    --input: 220 20% 14%;
-    --ring: 173 80% 45%;
+    --border: 220 12% 16%;
+    --input: 220 12% 14%;
+    --ring: 168 45% 52%;
 
-    --radius: 0.625rem;
+    --radius: 0.5rem;
 
-    /* Chart colors */
-    --chart-1: 173 80% 50%;
-    --chart-2: 199 89% 48%;
-    --chart-3: 152 70% 45%;
-    --chart-4: 38 92% 50%;
-    --chart-5: 280 65% 60%;
+    --chart-1: 168 45% 52%;
+    --chart-2: 200 60% 50%;
+    --chart-3: 145 50% 46%;
+    --chart-4: 35 85% 52%;
+    --chart-5: 280 50% 55%;
 
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(173, 80%, 45%), hsl(199, 89%, 48%));
-    --gradient-card: linear-gradient(180deg, hsl(222, 44%, 10%), hsl(222, 44%, 8%));
-    --gradient-glow: radial-gradient(ellipse at top, hsl(173, 80%, 45%, 0.15), transparent 50%);
-
-    /* Shadows */
-    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.3);
-    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.4), 0 2px 4px -2px hsl(0 0% 0% / 0.3);
-    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.5), 0 4px 6px -4px hsl(0 0% 0% / 0.4);
-    --shadow-glow: 0 0 20px hsl(173, 80%, 45%, 0.2);
-
-    /* Sidebar */
-    --sidebar-background: 222 47% 5%;
-    --sidebar-foreground: 210 30% 80%;
-    --sidebar-primary: 173 80% 45%;
-    --sidebar-primary-foreground: 222 47% 6%;
-    --sidebar-accent: 220 25% 15%;
-    --sidebar-accent-foreground: 210 40% 96%;
-    --sidebar-border: 220 20% 15%;
-    --sidebar-ring: 173 80% 45%;
+    --sidebar-background: 220 16% 6%;
+    --sidebar-foreground: 220 10% 75%;
+    --sidebar-primary: 168 45% 52%;
+    --sidebar-primary-foreground: 220 16% 8%;
+    --sidebar-accent: 220 12% 14%;
+    --sidebar-accent-foreground: 220 10% 92%;
+    --sidebar-border: 220 12% 14%;
+    --sidebar-ring: 168 45% 52%;
   }
 }
 
@@ -89,22 +65,20 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
-  /* Custom scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-track {
-    background: hsl(var(--background));
+    background: transparent;
   }
 
   ::-webkit-scrollbar-thumb {
     background: hsl(var(--muted));
-    border-radius: 4px;
+    border-radius: 3px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
@@ -113,27 +87,8 @@
 }
 
 @layer utilities {
-  .font-mono-numbers {
-    font-family: 'JetBrains Mono', monospace;
+  .font-mono {
+    font-family: 'IBM Plex Mono', monospace;
     font-variant-numeric: tabular-nums;
-  }
-
-  .text-gradient {
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .glow-border {
-    box-shadow: var(--shadow-glow);
-  }
-
-  .card-gradient {
-    background: var(--gradient-card);
-  }
-
-  .bg-glow {
-    background: var(--gradient-glow);
   }
 }

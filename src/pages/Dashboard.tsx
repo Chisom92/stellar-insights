@@ -17,47 +17,43 @@ export default function Dashboard() {
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="container py-8">
-        {/* Page Header */}
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold tracking-tight">Network Dashboard</h1>
-          <p className="text-muted-foreground">Real-time Stellar network analytics and metrics</p>
+      <main className="container py-6">
+        <div className="mb-6">
+          <h1 className="text-lg font-semibold">Dashboard</h1>
+          <p className="text-sm text-muted-foreground">Network metrics as of Jan 14, 2025</p>
         </div>
 
-        {/* KPI Cards */}
-        <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <KPICard
-            title="Payment Success Rate"
+            title="Success Rate"
             value={`${kpiData.paymentSuccessRate}%`}
             icon={Activity}
-            trend={{ value: 0.3, isPositive: true }}
+            change="+0.3% from last week"
           />
           <KPICard
             title="Active Corridors"
             value={kpiData.activeCorridors}
             icon={GitBranch}
-            trend={{ value: 5, isPositive: true }}
+            change="+5 new corridors"
           />
           <KPICard
             title="Liquidity Depth"
             value={formatCurrency(kpiData.liquidityDepth)}
             icon={DollarSign}
-            trend={{ value: 2.1, isPositive: true }}
+            change="+2.1% from last week"
           />
           <KPICard
-            title="Avg Settlement Time"
+            title="Avg Settlement"
             value={`${kpiData.avgSettlementTime}s`}
             icon={Clock}
-            trend={{ value: 0.5, isPositive: true }}
+            change="-0.5s improvement"
           />
         </div>
 
-        {/* Charts Row */}
-        <div className="mb-8">
+        <div className="mb-6">
           <PaymentsChart />
         </div>
 
-        {/* Tables Row */}
         <div className="grid gap-6 lg:grid-cols-2">
           <CorridorHeatmap />
           <TopAssetsTable />

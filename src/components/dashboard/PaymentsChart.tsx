@@ -10,54 +10,55 @@ import { paymentsOverTime } from "@/data/mockData";
 
 export function PaymentsChart() {
   return (
-    <div className="rounded-xl border border-border/50 bg-card p-6">
-      <div className="mb-6">
-        <h3 className="text-lg font-semibold">Payments Over Time</h3>
-        <p className="text-sm text-muted-foreground">Daily transaction volume</p>
+    <div className="rounded-lg border border-border bg-card p-5">
+      <div className="mb-4">
+        <h3 className="font-medium">Payments</h3>
+        <p className="text-sm text-muted-foreground">Daily transaction count</p>
       </div>
       
-      <div className="h-[300px]">
+      <div className="h-[280px]">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={paymentsOverTime}
-            margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
+            margin={{ top: 5, right: 5, left: 0, bottom: 0 }}
           >
             <defs>
               <linearGradient id="colorPayments" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="hsl(173, 80%, 45%)" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="hsl(173, 80%, 45%)" stopOpacity={0} />
+                <stop offset="5%" stopColor="hsl(168, 45%, 52%)" stopOpacity={0.2} />
+                <stop offset="95%" stopColor="hsl(168, 45%, 52%)" stopOpacity={0} />
               </linearGradient>
             </defs>
             <XAxis
               dataKey="date"
               axisLine={false}
               tickLine={false}
-              tick={{ fill: "hsl(215, 20%, 55%)", fontSize: 12 }}
-              dy={10}
+              tick={{ fill: "hsl(220, 10%, 50%)", fontSize: 11 }}
+              dy={8}
             />
             <YAxis
               axisLine={false}
               tickLine={false}
-              tick={{ fill: "hsl(215, 20%, 55%)", fontSize: 12 }}
+              tick={{ fill: "hsl(220, 10%, 50%)", fontSize: 11 }}
               tickFormatter={(value) => `${(value / 1000).toFixed(0)}k`}
-              dx={-10}
+              dx={-8}
+              width={40}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "hsl(222, 44%, 10%)",
-                border: "1px solid hsl(220, 20%, 18%)",
-                borderRadius: "8px",
-                boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.5)",
+                backgroundColor: "hsl(220, 14%, 12%)",
+                border: "1px solid hsl(220, 12%, 16%)",
+                borderRadius: "6px",
+                fontSize: "12px",
               }}
-              labelStyle={{ color: "hsl(210, 40%, 96%)", fontWeight: 500 }}
-              itemStyle={{ color: "hsl(173, 80%, 45%)" }}
+              labelStyle={{ color: "hsl(220, 10%, 92%)" }}
+              itemStyle={{ color: "hsl(168, 45%, 52%)" }}
               formatter={(value: number) => [value.toLocaleString(), "Payments"]}
             />
             <Area
               type="monotone"
               dataKey="payments"
-              stroke="hsl(173, 80%, 45%)"
-              strokeWidth={2}
+              stroke="hsl(168, 45%, 52%)"
+              strokeWidth={1.5}
               fill="url(#colorPayments)"
             />
           </AreaChart>
