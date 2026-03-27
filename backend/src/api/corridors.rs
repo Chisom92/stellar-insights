@@ -412,8 +412,6 @@ pub async fn list_corridors(
             )
             .await
             .map_err(|e| anyhow::anyhow!("Failed to fetch trades from RPC: {e}"))?;
-                }
-            };
 
             // Group payments by asset pairs to identify corridors
             use std::collections::HashMap;
@@ -1016,6 +1014,10 @@ pub async fn update_corridor_metrics_from_transactions(
 
     let metrics = compute_corridor_metrics(&txs, None, 1.0);
     let corridor = app_state.db.update_corridor_metrics(id, metrics).await?;
+    app_state
+        .cache
+        .invalidate_corridor(&corridor.to_string_key())
+        .await?;
 
     // Broadcast the corridor update to WebSocket clients
     broadcast_corridor_update(&app_state.ws_state, &corridor);
