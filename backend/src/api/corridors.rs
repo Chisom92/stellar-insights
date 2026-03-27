@@ -355,7 +355,6 @@ pub async fn list_corridors(
             let circuit_breaker = rpc_circuit_breaker();
 
             // **RPC DATA**: Fetch recent payments with pagination to identify active corridors
-            // Use paginated fetch to get more complete data (up to configured limit)
             let payments = with_retry(
                 || async {
                     rpc_client
@@ -704,6 +703,7 @@ fn find_related_corridors(
         (status = 500, description = "Internal server error")
     ),
     tag = "Corridors"
+)]
 #[instrument(
     skip(db, cache, rpc_client, price_feed),
     fields(request_id = %request_id.0, corridor_key = %corridor_key)
