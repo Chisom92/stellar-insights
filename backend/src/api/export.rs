@@ -63,10 +63,10 @@ pub async fn export_corridors(
             for m in corridors {
                 wtr.write_record(&[
                     m.corridor_key,
-                    m.asset_a_code,
-                    m.asset_a_issuer,
-                    m.asset_b_code,
-                    m.asset_b_issuer,
+                    m.source_asset_code,
+                    m.source_asset_issuer,
+                    m.destination_asset_code,
+                    m.destination_asset_issuer,
                     format!("{:.2}", m.avg_success_rate),
                     m.total_transactions.to_string(),
                     m.successful_transactions.to_string(),
@@ -92,7 +92,10 @@ pub async fn export_corridors(
         }
         "json" => {
             let mut headers = HeaderMap::new();
-            headers.insert(header::CONTENT_TYPE, HeaderValue::from_static("application/json"));
+            headers.insert(
+                header::CONTENT_TYPE,
+                HeaderValue::from_static("application/json"),
+            );
             headers.insert(
                 header::CONTENT_DISPOSITION,
                 HeaderValue::from_static("attachment; filename=\"corridors_export.json\""),
@@ -124,11 +127,10 @@ pub async fn export_corridors(
                 "Latest Date",
             ];
 
-            for (i, header_text) in headers.iter().enumerate() {
-                worksheet
-                    .write_with_format(0, i as u16, *header_text, &header_format)
-                    .map_err(|e| ApiError::internal("EXPORT_ERROR", e.to_string()))?;
-            }
+            headers.iter().enumerate().try_for_each(|(i, h)| {
+                worksheet.write_with_format(0, i as u16, *h, &header_format)
+                    .map_err(|e| ApiError::internal("EXPORT_ERROR", e.to_string()))
+            })?;
 
             for (row, m) in corridors.iter().enumerate() {
                 let row = (row + 1) as u32;
@@ -136,16 +138,16 @@ pub async fn export_corridors(
                     .write(row, 0, &m.corridor_key)
                     .map_err(|e| ApiError::internal("EXPORT_ERROR", e.to_string()))?;
                 worksheet
-                    .write(row, 1, &m.asset_a_code)
+                    .write(row, 1, &m.source_asset_code)
                     .map_err(|e| ApiError::internal("EXPORT_ERROR", e.to_string()))?;
                 worksheet
-                    .write(row, 2, &m.asset_a_issuer)
+                    .write(row, 2, &m.source_asset_issuer)
                     .map_err(|e| ApiError::internal("EXPORT_ERROR", e.to_string()))?;
                 worksheet
-                    .write(row, 3, &m.asset_b_code)
+                    .write(row, 3, &m.destination_asset_code)
                     .map_err(|e| ApiError::internal("EXPORT_ERROR", e.to_string()))?;
                 worksheet
-                    .write(row, 4, &m.asset_b_issuer)
+                    .write(row, 4, &m.destination_asset_issuer)
                     .map_err(|e| ApiError::internal("EXPORT_ERROR", e.to_string()))?;
                 worksheet
                     .write(row, 5, m.avg_success_rate)
@@ -174,7 +176,9 @@ pub async fn export_corridors(
             let mut headers = HeaderMap::new();
             headers.insert(
                 header::CONTENT_TYPE,
-                HeaderValue::from_static("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
+                HeaderValue::from_static(
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                ),
             );
             headers.insert(
                 header::CONTENT_DISPOSITION,
@@ -189,7 +193,6 @@ pub async fn export_corridors(
         )),
     }
 }
-
 
 pub async fn export_anchors(
     State(app_state): State<AppState>,
@@ -252,7 +255,10 @@ pub async fn export_anchors(
         }
         "json" => {
             let mut headers = HeaderMap::new();
-            headers.insert(header::CONTENT_TYPE, HeaderValue::from_static("application/json"));
+            headers.insert(
+                header::CONTENT_TYPE,
+                HeaderValue::from_static("application/json"),
+            );
             headers.insert(
                 header::CONTENT_DISPOSITION,
                 HeaderValue::from_static("attachment; filename=\"anchors_export.json\""),
@@ -284,11 +290,10 @@ pub async fn export_anchors(
                 "Last Updated",
             ];
 
-            for (i, header_text) in headers.iter().enumerate() {
-                worksheet
-                    .write_with_format(0, i as u16, *header_text, &header_format)
-                    .map_err(|e| ApiError::internal("EXPORT_ERROR", e.to_string()))?;
-            }
+            headers.iter().enumerate().try_for_each(|(i, h)| {
+                worksheet.write_with_format(0, i as u16, *h, &header_format)
+                    .map_err(|e| ApiError::internal("EXPORT_ERROR", e.to_string()))
+            })?;
 
             for (row, a) in anchors.iter().enumerate() {
                 let row = (row + 1) as u32;
@@ -334,7 +339,9 @@ pub async fn export_anchors(
             let mut headers = HeaderMap::new();
             headers.insert(
                 header::CONTENT_TYPE,
-                HeaderValue::from_static("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
+                HeaderValue::from_static(
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                ),
             );
             headers.insert(
                 header::CONTENT_DISPOSITION,
@@ -428,7 +435,10 @@ pub async fn export_payments(
         }
         "json" => {
             let mut headers = HeaderMap::new();
-            headers.insert(header::CONTENT_TYPE, HeaderValue::from_static("application/json"));
+            headers.insert(
+                header::CONTENT_TYPE,
+                HeaderValue::from_static("application/json"),
+            );
             headers.insert(
                 header::CONTENT_DISPOSITION,
                 HeaderValue::from_static("attachment; filename=\"payments_export.json\""),
@@ -457,11 +467,10 @@ pub async fn export_payments(
                 "Timestamp",
             ];
 
-            for (i, header_text) in headers.iter().enumerate() {
-                worksheet
-                    .write_with_format(0, i as u16, *header_text, &header_format)
-                    .map_err(|e| ApiError::internal("EXPORT_ERROR", e.to_string()))?;
-            }
+            headers.iter().enumerate().try_for_each(|(i, h)| {
+                worksheet.write_with_format(0, i as u16, *h, &header_format)
+                    .map_err(|e| ApiError::internal("EXPORT_ERROR", e.to_string()))
+            })?;
 
             for (row, p) in payments.iter().enumerate() {
                 let row = (row + 1) as u32;
@@ -509,7 +518,9 @@ pub async fn export_payments(
             let mut headers = HeaderMap::new();
             headers.insert(
                 header::CONTENT_TYPE,
-                HeaderValue::from_static("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
+                HeaderValue::from_static(
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                ),
             );
             headers.insert(
                 header::CONTENT_DISPOSITION,

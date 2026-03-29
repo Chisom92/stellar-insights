@@ -8,6 +8,7 @@ pub mod monitor;
 
 pub mod auth;
 pub mod auth_middleware;
+pub mod backup;
 pub mod broadcast;
 pub mod cache;
 pub mod cache_invalidation;

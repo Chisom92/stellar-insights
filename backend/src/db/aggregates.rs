@@ -1,4 +1,4 @@
-use anyhow::{anyhow, Result};
+use anyhow::{anyhow, Context, Result};
 use chrono::NaiveDate;
 use serde::Serialize;
 use sqlx::SqlitePool;
@@ -42,10 +42,10 @@ impl CorridorAggregates {
             ",
         )
         .bind(&corridor_key)
-        .bind(&analytics.corridor.asset_a_code)
-        .bind(&analytics.corridor.asset_a_issuer)
-        .bind(&analytics.corridor.asset_b_code)
-        .bind(&analytics.corridor.asset_b_issuer)
+        .bind(&analytics.corridor.source_asset_code)
+        .bind(&analytics.corridor.source_asset_issuer)
+        .bind(&analytics.corridor.destination_asset_code)
+        .bind(&analytics.corridor.destination_asset_issuer)
         .bind(date_datetime)
         .bind(analytics.total_transactions)
         .bind(analytics.successful_transactions)
@@ -53,7 +53,11 @@ impl CorridorAggregates {
         .bind(analytics.success_rate)
         .bind(analytics.volume_usd)
         .fetch_one(&self.pool)
-        .await?;
+        .await
+        .context(format!(
+            "Failed to store daily corridor metrics for corridor: {} on date: {}",
+            corridor_key, date
+        ))?;
 
         Ok(metrics)
     }
@@ -79,7 +83,11 @@ impl CorridorAggregates {
         .bind(start_datetime)
         .bind(end_datetime)
         .fetch_all(&self.pool)
-        .await?;
+        .await
+        .context(format!(
+            "Failed to get corridor metrics for corridor: {} from {} to {}",
+            corridor_key, start_date, end_date
+        ))?;
 
         Ok(metrics)
     }
@@ -101,7 +109,8 @@ impl CorridorAggregates {
         .bind(date_datetime)
         .bind(next_day)
         .fetch_all(&self.pool)
-        .await?;
+        .await
+        .context(format!("Failed to get corridor metrics for date: {}", date))?;
 
         Ok(metrics)
     }
@@ -137,7 +146,11 @@ impl CorridorAggregates {
         .bind(start_datetime)
         .bind(end_datetime)
         .fetch_all(&self.pool)
-        .await?;
+        .await
+        .context(format!(
+            "Failed to get aggregated corridor metrics from {} to {}",
+            start_date, end_date
+        ))?;
 
         Ok(metrics)
     }
@@ -162,7 +175,11 @@ impl CorridorAggregates {
         .bind(next_day)
         .bind(limit)
         .fetch_all(&self.pool)
-        .await?;
+        .await
+        .context(format!(
+            "Failed to get top corridors by volume for date: {} (limit={})",
+            date, limit
+        ))?;
 
         Ok(metrics)
     }
@@ -187,7 +204,11 @@ impl CorridorAggregates {
         .bind(next_day)
         .bind(limit)
         .fetch_all(&self.pool)
-        .await?;
+        .await
+        .context(format!(
+            "Failed to get top corridors by transactions for date: {} (limit={})",
+            date, limit
+        ))?;
 
         Ok(metrics)
     }
@@ -215,7 +236,11 @@ impl CorridorAggregates {
         .bind(min_success_rate)
         .bind(min_transactions)
         .fetch_all(&self.pool)
-        .await?;
+        .await
+        .context(format!(
+            "Failed to get corridors by success rate for date: {} (min_rate={}, min_txs={})",
+            date, min_success_rate, min_transactions
+        ))?;
 
         Ok(metrics)
     }
@@ -244,7 +269,11 @@ impl CorridorAggregates {
         .bind(start_datetime)
         .bind(end_datetime)
         .fetch_one(&self.pool)
-        .await?;
+        .await
+        .context(format!(
+            "Failed to get corridor summary stats from {} to {}",
+            start_date, end_date
+        ))?;
 
         Ok(stats)
     }
@@ -260,7 +289,11 @@ impl CorridorAggregates {
         )
         .bind(cutoff_datetime)
         .execute(&self.pool)
-        .await?;
+        .await
+        .context(format!(
+            "Failed to delete metrics older than: {}",
+            cutoff_date
+        ))?;
 
         Ok(result.rows_affected())
     }
@@ -281,10 +314,14 @@ fn end_of_day_utc(date: NaiveDate) -> Result<chrono::DateTime<chrono::Utc>> {
 #[derive(Debug, Clone, Serialize, sqlx::FromRow)]
 pub struct AggregatedCorridorMetrics {
     pub corridor_key: String,
-    pub asset_a_code: String,
-    pub asset_a_issuer: String,
-    pub asset_b_code: String,
-    pub asset_b_issuer: String,
+    #[sqlx(rename = "asset_a_code")]
+    pub source_asset_code: String,
+    #[sqlx(rename = "asset_a_issuer")]
+    pub source_asset_issuer: String,
+    #[sqlx(rename = "asset_b_code")]
+    pub destination_asset_code: String,
+    #[sqlx(rename = "asset_b_issuer")]
+    pub destination_asset_issuer: String,
     pub total_transactions: i64,
     pub successful_transactions: i64,
     pub failed_transactions: i64,
